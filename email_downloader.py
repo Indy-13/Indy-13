@@ -1,12 +1,15 @@
 import os
 import time
 from imbox import Imbox  # pip install imbox
-import traceback
-import datetime
+from logger import Logger
 from photos_api_helper import PhotosAPIHelper
 
 CREDS_FILE = "client_secret_fotopasti_fotky.json"
-api_helper = PhotosAPIHelper(CREDS_FILE)
+
+logger_config = {"LOG_FILE": r"/home/ubuntu/EmailDownloader/EmailDownloader.log"}
+logger = Logger(logger_config)
+
+api_helper = PhotosAPIHelper(CREDS_FILE, logger)
 
 host = "imap.gmail.com"
 username = "fotopasti.fotky@gmail.com"
@@ -25,10 +28,10 @@ while True:
     messages = mail.messages(unread=True)
 
     for (uid, email_message) in messages:
-        mail.mark_seen(uid)  
+        mail.mark_seen(uid)
 
         email_sender = email_message.sent_from[0].get("email").split("@")[0].lower()
-        
+
         for idx, attachment in enumerate(email_message.attachments):
             try:
                 att_type = attachment.get("content-type").lower()
@@ -37,16 +40,26 @@ while True:
                     if not att_fn:
                         image_id = email_message.subject.split("-")[-1]
                         att_fn = (
-                            image_id if str(image_id).lower().endswith(".jpg") else f"{image_id}.jpg"
+                            image_id
+                            if str(image_id).lower().endswith(".jpg")
+                            else f"{image_id}.jpg"
                         )
                     extension = os.path.splitext(att_fn)[1]
                     if extension.lower() == ".jpg":
                         album_id = api_helper.get_album_id(email_sender)
-                        print(f"{datetime.datetime.now()}\tUploading image: {att_fn}")
+                        logger.log_message(
+                            1,
+                            "INFO",
+                            f"Uploading image: {att_fn}",
+                        )
                         image_data = attachment.get("content").read()
                         api_helper.add_image_to_album(album_id, att_fn, image_data)
-            except:
-                print(traceback.print_exc())
+            except Exception as e:
+                logger.log_message(
+                    1,
+                    "ERROR",
+                    f"Attachement processing failed: {e}",
+                )
 
     mail.logout()
 

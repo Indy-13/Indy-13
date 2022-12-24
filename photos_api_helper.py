@@ -12,8 +12,9 @@ from google.auth.transport.requests import Request
 
 
 class PhotosAPIHelper:
-    def __init__(self, client_secrets_file):
+    def __init__(self, client_secrets_file, logger):
 
+        self.__logger = logger
         self.__api_name = "photoslibrary"
         self.__api_version = "v1"
         self.__scopes = [
@@ -28,14 +29,6 @@ class PhotosAPIHelper:
         self.__album_cache = dict()
 
     def __create_service(self):
-        print(
-            self.__client_secrets_file,
-            self.__api_name,
-            self.__api_version,
-            self.__scopes,
-            sep="-",
-        )
-
         cred = self.__get_credentials()
 
         try:
@@ -45,10 +38,18 @@ class PhotosAPIHelper:
                 credentials=cred,
                 static_discovery=False,
             )
-            print(self.__api_name, "service created successfully")
+            self.__logger.log_message(
+                1,
+                "INFO",
+                "Service created successfully",
+            )
             return service
         except Exception as e:
-            print(e)
+            self.__logger.log_message(
+                1,
+                "ERROR",
+                f"Create service failed: {e}",
+            )
         return None
 
     def __get_credentials(self):
