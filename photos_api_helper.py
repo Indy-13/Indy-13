@@ -19,7 +19,7 @@ class PhotosAPIHelper:
         ]
         self.__client_secrets_file = client_secrets_file
 
-        self.__pickle_file = f"token_{self.__api_name}_{self.__api_version}.pickle"
+        self.__pickle_file = f"/home/ubuntu/EmailDownloader/token_{self.__api_name}_{self.__api_version}.pickle"
         self.__service = self.__create_service()
 
         self.__album_cache = dict()
