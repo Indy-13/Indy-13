@@ -1,5 +1,4 @@
 import os
-import time
 import platform
 from imbox import Imbox  # pip install imbox
 from logger import Logger
@@ -24,52 +23,49 @@ host = "imap.gmail.com"
 username = "fotopasti.fotky@gmail.com"
 password = "kiyatzuwmtupmaqc"
 
-while True:
-    mail = Imbox(
-        host,
-        port=993,
-        username=username,
-        password=password,
-        ssl=True,
-        ssl_context=None,
-        starttls=False,
-    )
-    messages = mail.messages(unread=True)
+mail = Imbox(
+    host,
+    port=993,
+    username=username,
+    password=password,
+    ssl=True,
+    ssl_context=None,
+    starttls=False,
+)
+messages = mail.messages(unread=True)
 
-    for (uid, email_message) in messages:
-        mail.mark_seen(uid)
+for (uid, email_message) in messages:
+    mail.mark_seen(uid)
 
-        email_sender = email_message.sent_from[0].get("email").split("@")[0].lower()
+    email_sender = email_message.sent_from[0].get("email").split("@")[0].lower()
 
-        for idx, attachment in enumerate(email_message.attachments):
-            try:
-                att_type = attachment.get("content-type").lower()
-                if att_type == "application/octet-stream":
-                    att_fn = attachment.get("filename")
-                    if not att_fn:
-                        image_id = email_message.subject.split("-")[-1]
-                        att_fn = (
-                            image_id
-                            if str(image_id).lower().endswith(".jpg")
-                            else f"{image_id}.jpg"
-                        )
-                    extension = os.path.splitext(att_fn)[1]
-                    if extension.lower() == ".jpg":
-                        album_id = api_helper.get_album_id(email_sender)
-                        logger.log_message(
-                            1,
-                            "INFO",
-                            f"Uploading image: {att_fn}",
-                        )
-                        image_data = attachment.get("content").read()
-                        api_helper.add_image_to_album(album_id, att_fn, image_data)
-            except Exception as e:
-                logger.log_message(
-                    1,
-                    "ERROR",
-                    f"Attachement processing failed: {e}",
-                )
+    for idx, attachment in enumerate(email_message.attachments):
+        try:
+            att_type = attachment.get("content-type").lower()
+            if att_type == "application/octet-stream":
+                att_fn = attachment.get("filename")
+                if not att_fn:
+                    image_id = email_message.subject.split("-")[-1]
+                    att_fn = (
+                        image_id
+                        if str(image_id).lower().endswith(".jpg")
+                        else f"{image_id}.jpg"
+                    )
+                extension = os.path.splitext(att_fn)[1]
+                if extension.lower() == ".jpg":
+                    album_id = api_helper.get_album_id(email_sender)
+                    logger.log_message(
+                        1,
+                        "INFO",
+                        f"Uploading image: {att_fn}",
+                    )
+                    image_data = attachment.get("content").read()
+                    api_helper.add_image_to_album(album_id, att_fn, image_data)
+        except Exception as e:
+            logger.log_message(
+                1,
+                "ERROR",
+                f"Attachement processing failed: {e}",
+            )
 
-    mail.logout()
-
-    time.sleep(60)
+mail.logout()
