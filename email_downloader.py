@@ -4,7 +4,7 @@ from imbox import Imbox  # pip install imbox
 from logger import Logger
 from photos_api_helper import PhotosAPIHelper
 
-CREDS_FILE = "client_secret_fotopasti_fotky.json"
+CREDS_FILE = "/home/ubuntu/EmailDownloader/client_secret_fotopasti_fotky.json"
 
 current_patform = str(platform.system()).lower()
 
