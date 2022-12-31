@@ -5,14 +5,14 @@ from imbox import Imbox  # pip install imbox
 from logger import Logger
 from photos_api_helper import PhotosAPIHelper
 
-CREDS_FILE = "/home/ubuntu/EmailDownloader/client_secret_fotopasti_fotky.json"
-
 current_patform = str(platform.system()).lower()
 
 if current_patform == "windows":
     logger_config = {"LOG_FILE": r"c:\Temp\EmailDownloader.log"}
+    CREDS_FILE = "client_secret_fotopasti_fotky.json"
 elif current_patform == "linux":
     logger_config = {"LOG_FILE": "/home/ubuntu/EmailDownloader/EmailDownloader.log"}
+    CREDS_FILE = "/home/ubuntu/EmailDownloader/client_secret_fotopasti_fotky.json"
 else:
     logger_config = {"LOG_FILE": "EmailDownloader.log"}
 
