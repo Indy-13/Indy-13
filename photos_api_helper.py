@@ -22,6 +22,13 @@ class PhotosAPIHelper:
         workspace_path = os.path.dirname(os.path.realpath(self.__client_secrets_file))
 
         self.__pickle_file = os.path.join(workspace_path, f"token_{self.__api_name}_{self.__api_version}.pickle")
+
+        logger.log_message(
+            1,
+            "INFO",
+            f"Pickle file path: {self.__pickle_file}",
+        )
+
         self.__service = self.__create_service()
 
         self.__album_cache = dict()

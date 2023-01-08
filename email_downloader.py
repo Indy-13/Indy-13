@@ -24,6 +24,12 @@ host = "imap.gmail.com"
 username = "fotopasti.fotky@gmail.com"
 password = "gxjcgvcqnlrycjdi"
 
+logger.log_message(
+    1,
+    "INFO",
+    "Starting email loop...",
+)
+
 while True:
     mail = Imbox(
         host,
