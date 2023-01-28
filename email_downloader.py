@@ -43,8 +43,7 @@ while True:
     messages = mail.messages(unread=True)
 
     for (uid, email_message) in messages:
-        mail.mark_seen(uid)
-
+        
         email_sender = email_message.sent_from[0].get("email").split("@")[0].lower()
 
         for idx, attachment in enumerate(email_message.attachments):
@@ -69,6 +68,7 @@ while True:
                         )
                         image_data = attachment.get("content").read()
                         api_helper.add_image_to_album(album_id, att_fn, image_data)
+                mail.mark_seen(uid)
             except Exception as e:
                 logger.log_message(
                     1,
