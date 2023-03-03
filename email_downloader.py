@@ -22,7 +22,7 @@ api_helper = PhotosAPIHelper(CREDS_FILE, logger)
 
 host = "imap.gmail.com"
 username = "fotopasti.fotky@gmail.com"
-password = "gxjcgvcqnlrycjdi"
+password = "bmbrnrfafpupdyvn"
 
 logger.log_message(
     1,
