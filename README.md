@@ -1,7 +1,7 @@
 - 👋 Hi, I’m @Indy-13
-- 👀 I’m interested in many things, now primarily on IoT.
+- 👀 I’m interested in many things, now primarily on Data Science, ML and IoT.
 - 🌱 I’m currently learning Home Assistant.
-- 💞️ I’m not looking to collaborate on anything right now as I'm completely new in this environment.
+- 💞️ I’m not looking to collaborate on anything right now.
 - 📫 How to reach me ...
 
 <!---
